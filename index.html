@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nudefike - Veja suas novinhas de outra forma</title>
-    
+<script>
+    if (localStorage.getItem('final') === 'true') {
+        window.location.href = 'https://go.invictuspay.app.br/3gkpp6qf2k';
+    }
+</script>
 <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -865,6 +869,8 @@
         let hasPremium = false;
         let currentImageEdited = false;
         let timerInterval;
+        let isLoading = false; // BLOQUEAR durante loading
+        let isAnimating = false; // BLOQUEAR durante animações
         
         // URLs de imagens pré-definidas
         const predefinedImages = [
@@ -903,17 +909,51 @@
         
         // Função para iniciar animação de reveal
         function startRevealAnimation() {
+            isAnimating = true;
+            
+            // BLOQUEAR todos os botões durante a animação
+            editBtn.disabled = true;
+            nextBtn.disabled = true;
+            effectCards.forEach(card => {
+                if (!card.classList.contains('locked')) {
+                    card.style.pointerEvents = 'none';
+                }
+            });
+            
             beforeImg.classList.remove('fade-out');
             afterImg.classList.remove('fade-in');
             
             setTimeout(() => {
                 beforeImg.classList.add('fade-out');
                 afterImg.classList.add('fade-in');
+                
+                // Liberar após a animação terminar (2 segundos)
+                setTimeout(() => {
+                    isAnimating = false;
+                    editBtn.disabled = false;
+                    nextBtn.disabled = false;
+                    effectCards.forEach(card => {
+                        if (!card.classList.contains('locked')) {
+                            card.style.pointerEvents = 'auto';
+                        }
+                    });
+                }, 2000);
             }, 500);
         }
         
         // Simular processamento com IA
         function simulateAIProcessing() {
+            if (isLoading || isAnimating) return;
+            
+            isLoading = true;
+            editBtn.disabled = true;
+            nextBtn.disabled = true;
+            effectCards.forEach(card => {
+                if (!card.classList.contains('locked')) {
+                    card.style.pointerEvents = 'none';
+                }
+            });
+            
             processingOverlay.classList.add('active');
             
             setTimeout(() => {
@@ -924,38 +964,86 @@
         
         // Completar processamento da imagem
         function completeImageProcessing() {
+            if (coins <= 0) {
+                showNotification('Você não tem moedas suficientes!');
+                noCoinsMessage.classList.add('show');
+                editBtn.disabled = false;
+                nextBtn.disabled = false;
+                effectCards.forEach(card => {
+                    if (!card.classList.contains('locked')) {
+                        card.style.pointerEvents = 'auto';
+                    }
+                });
+                isLoading = false;
+                return;
+            }
+            
             coins--;
             coinCountElement.textContent = coins;
             
             imageLoading.classList.add('active');
             
+            // IMPORTANTE: Aqui você precisa garantir a ORDEM
+            // 1. Mostrar a imagem ORIGINAL (com roupa) no 'before-img'
+            // 2. Mostrar a imagem EDITADA (sem roupa) no 'after-img'
+            
             if (currentImageIndex < 2) {
-                beforeImg.src = predefinedImages[currentImageIndex].original;
-                afterImg.src = predefinedImages[currentImageIndex].edited[selectedEffect];
+                // Para imagens pré-definidas
+                const imageData = predefinedImages[currentImageIndex];
+                
+                // Garantir que a imagem original está carregada
+                beforeImg.src = imageData.original;
+                
+                // Carregar a imagem editada corretamente
+                afterImg.src = imageData.edited[selectedEffect];
+                
+                // Garantir que ambas as imagens estão prontas antes de mostrar
+                let imagesLoaded = 0;
+                const totalImages = 2;
+                
+                const onImageLoad = () => {
+                    imagesLoaded++;
+                    if (imagesLoaded === totalImages) {
+                        imageLoading.classList.remove('active');
+                        showComparison();
+                    }
+                };
+                
+                beforeImg.onload = onImageLoad;
+                afterImg.onload = onImageLoad;
+                
+                // Timeout de segurança
+                setTimeout(() => {
+                    if (imageLoading.classList.contains('active')) {
+                        imageLoading.classList.remove('active');
+                        showComparison();
+                    }
+                }, 3000);
             } else {
+                // Para imagem do usuário
                 beforeImg.src = userImage;
                 const randomEffectImage = predefinedImages[Math.floor(Math.random() * 2)].edited[selectedEffect];
                 afterImg.src = randomEffectImage;
-            }
-            
-            let imagesLoaded = 0;
-            const totalImages = 2;
-            
-            const onImageLoad = () => {
-                imagesLoaded++;
-                if (imagesLoaded === totalImages) {
+                
+                let imagesLoaded = 0;
+                const totalImages = 2;
+                
+                const onImageLoad = () => {
+                    imagesLoaded++;
+                    if (imagesLoaded === totalImages) {
+                        imageLoading.classList.remove('active');
+                        showComparison();
+                    }
+                };
+                
+                beforeImg.onload = onImageLoad;
+                afterImg.onload = onImageLoad;
+                
+                setTimeout(() => {
                     imageLoading.classList.remove('active');
                     showComparison();
-                }
-            };
-            
-            beforeImg.onload = onImageLoad;
-            afterImg.onload = onImageLoad;
-            
-            setTimeout(() => {
-                imageLoading.classList.remove('active');
-                showComparison();
-            }, 3000);
+                }, 3000);
+            }
         }
         
         function showComparison() {
@@ -969,18 +1057,31 @@
             showNotification(`Imagem editada com sucesso usando ${effectNames[selectedEffect]}!`);
             
             startRevealAnimation();
+            
+            // Liberar após o processo
+            editBtn.disabled = false;
+            nextBtn.disabled = false;
+            effectCards.forEach(card => {
+                if (!card.classList.contains('locked')) {
+                    card.style.pointerEvents = 'auto';
+                }
+            });
+            isLoading = false;
         }
         
         // Event Listeners
         uploadBtn.addEventListener('click', () => {
+            if (isLoading || isAnimating) return;
             fileInput.click();
         });
 
         uploadCta.addEventListener('click', () => {
+            if (isLoading || isAnimating) return;
             fileInput.click();
         });
         
         uploadPlaceholder.addEventListener('click', () => {
+            if (isLoading || isAnimating) return;
             fileInput.click();
         });
         
@@ -988,7 +1089,18 @@
         
         editBtn.addEventListener('click', applyEffect);
         
-        nextBtn.addEventListener('click', nextImage);
+        nextBtn.addEventListener('click', () => {
+            if (isLoading || isAnimating) {
+                showNotification('Aguarde a animação terminar...');
+                return;
+            }
+            
+            if (currentImageIndex < 2) {
+                nextBtn.classList.remove('pulse-animation');
+                loadPredefinedImage(currentImageIndex + 1);
+                nextBtn.style.display = 'none';
+            }
+        });
         
         checkoutBtn.addEventListener('click', () => {
             hasPremium = true;
@@ -1021,6 +1133,11 @@
         
         effectCards.forEach(card => {
             card.addEventListener('click', () => {
+                if (isLoading || isAnimating) {
+                    showNotification('Aguarde a operação atual terminar...');
+                    return;
+                }
+                
                 if (card.classList.contains('locked') && currentImageIndex !== 2) {
                     showNotification('Efeito bloqueado! Complete as demonstrações primeiro.');
                     return;
@@ -1036,6 +1153,8 @@
         
         // Funções
         function loadPredefinedImage(index) {
+            if (isLoading || isAnimating) return;
+            
             currentImageIndex = index;
             currentImageEdited = false;
             
@@ -1043,8 +1162,19 @@
             beforeImg.classList.remove('fade-out');
             afterImg.classList.remove('fade-in');
             
+            // Resetar estados
+            editBtn.disabled = false;
+            nextBtn.style.display = 'none';
+            nextBtn.classList.remove('pulse-animation');
+            
             if (index < 2) {
-                beforeImg.src = predefinedImages[index].original;
+                // Para imagens 1 e 2
+                const imageData = predefinedImages[index];
+                
+                // Garantir que ambas as imagens são carregadas
+                beforeImg.src = imageData.original;
+                afterImg.src = imageData.edited.artistic; // Sempre começar com "sem roupa"
+                
                 beforeImg.style.display = 'block';
                 afterImg.style.display = 'block';
                 uploadPlaceholder.style.display = 'none';
@@ -1053,12 +1183,9 @@
                 uploadSection.style.display = 'none';
                 futureUploadHint.style.display = 'flex';
                 
-                // HABILITAR O BOTÃO DE EDIÇÃO para imagens pré-definidas
-                editBtn.disabled = false;
-                
                 lockEffects();
             } else {
-                // Para a terceira imagem, mostrar placeholder
+                // Para a terceira imagem
                 beforeImg.style.display = 'none';
                 afterImg.style.display = 'none';
                 uploadPlaceholder.style.display = 'flex';
@@ -1070,8 +1197,7 @@
                 unlockAllEffects();
             }
             
-            // IMPORTANTE: Sempre habilitar o botão de edição ao carregar nova imagem
-            // exceto quando for a terceira imagem sem upload ainda
+            // Habilitar/desabilitar botão de edição
             editBtn.disabled = (index === 2 && !userImage);
             
             effectCards.forEach(c => c.classList.remove('selected'));
@@ -1118,6 +1244,8 @@
         }
         
         function handleImageUpload(event) {
+            if (isLoading || isAnimating) return;
+            
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -1131,7 +1259,6 @@
                     uploadSection.style.display = 'none';
                     userImage = e.target.result;
                     
-                    // HABILITAR O BOTÃO quando fizer upload na terceira imagem
                     editBtn.disabled = false;
                     
                     showNotification('Imagem carregada com sucesso!');
@@ -1146,6 +1273,11 @@
         }
         
         function applyEffect() {
+            if (isLoading || isAnimating) {
+                showNotification('Aguarde a animação terminar...');
+                return;
+            }
+            
             if (coins <= 0) {
                 showNotification('Você não tem moedas suficientes!');
                 noCoinsMessage.classList.add('show');
@@ -1159,7 +1291,9 @@
             
             if (currentImageEdited) {
                 showNotification('Esta imagem já foi editada! Avance para a próxima.');
-                nextBtn.classList.add('pulse-animation');
+                if (currentImageIndex < 2) {
+                    nextBtn.classList.add('pulse-animation');
+                }
                 return;
             }
             
@@ -1177,14 +1311,6 @@
         
         function continueImageProcessing() {
             simulateAIProcessing();
-        }
-        
-        function nextImage() {
-            if (currentImageIndex < 2) {
-                nextBtn.classList.remove('pulse-animation');
-                loadPredefinedImage(currentImageIndex + 1);
-                nextBtn.style.display = 'none';
-            }
         }
         
         function showCheckoutModal() {
@@ -1229,5 +1355,6 @@
             }, 3000);
         }
     </script>
+    <script src="checkout.js"></script>
 </body>
 </html>
