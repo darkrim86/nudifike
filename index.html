@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nudefike - Veja suas novinhas de outra forma</title>
+    
+<script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n; n.push=n; n.loaded=!0; n.version='2.0';
+    n.queue=[]; t=b.createElement(e); t.async=!0;
+    t.src=v; s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '851026700846724'); // <--- substitua pelo seu ID
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+         src="https://www.facebook.com/tr?id=851026700846724&ev=PageView&noscript=1"/>
+  </noscript>
+    
+    <!-- Ícone da aba é um fo-->
+    <link rel="icon" type="image/png" href="public/nudefikelogo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .efeito {
+            width: 50px;
+            height: 70px;
+            object-fit: contain;
+        }
+        body {
+            background: linear-gradient(135deg, #1a0b2e, #2d0b3a, #4a0b4a);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+        
+        .logo {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #e53e6a, #d53a9d, #b83280);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            letter-spacing: -1px;
+        }
+        
+        .coin-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(229, 62, 106, 0.2);
+            border-radius: 20px;
+            padding: 12px 25px;
+            margin-bottom: 20px;
+            gap: 10px;
+            position: relative;
+            border: 1px solid rgba(229, 62, 106, 0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+            animation: slideInDown 0.6s ease-out 0.2s both;
+        }
+        
+        .coin-icon {
+            color: #ffd700;
+            font-size: 1.5rem;
+        }
+        
+        .coin-count {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffd700;
+        }
+        
+        .image-container {
+            background: rgba(40, 10, 50, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+            border: 1px solid rgba(229, 62, 106, 0.2);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            min-height: 300px;
+        }
+        
+        .image-stage {
+            width: 100%;
+            height: 220px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+        }
+        
+        .image-before, .image-after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            object-fit: contain;
+            background: #000;
+        }
+        
+        .image-before {
+            z-index: 2;
+            opacity: 1;
+            transition: opacity 1.5s ease-in-out;
+        }
+        
+        .image-before.fade-out {
+            opacity: 0;
+        }
+        
+        .image-after {
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out 0.5s;
+        }
+        
+        .image-after.fade-in {
+            opacity: 1;
+        }
+        
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .upload-btn, .edit-btn, .next-btn {
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .upload-btn {
+            background: rgba(229, 62, 106, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px dashed rgba(229, 62, 106, 0.4);
+        }
+        
+        .upload-btn:hover {
+            background: rgba(229, 62, 106, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(229, 62, 106, 0.3);
+        }
+        
+        .edit-btn {
+            background: linear-gradient(90deg, #e53e6a, #d53a9d);
+            color: white;
+            box-shadow: 0 4px 15px rgba(229, 62, 106, 0.3);
+            border: 1px solid rgba(229, 62, 106, 0.3);
+            animation: pulse-glow 2s infinite;
+        }
+        
+        .edit-btn:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.4);
+            cursor: not-allowed;
+            box-shadow: none;
+            animation: none;
+        }
+        
+        .edit-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(229, 62, 106, 0.4);
+            animation: none;
+        }
+        
+        .next-btn {
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+        
+        .next-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+        
+        .effects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .effect-card {
+            background: rgba(50, 15, 60, 0.5);
+            border-radius: 12px;
+            padding: 18px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid rgba(229, 62, 106, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        
+        .effect-card:hover {
+            background: rgba(229, 62, 106, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .effect-card.selected {
+            background: rgba(229, 62, 106, 0.3);
+            border: 1px solid rgba(229, 62, 106, 0.5);
+            box-shadow: 0 0 15px rgba(229, 62, 106, 0.3);
+        }
+        
+        .effect-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: rgba(30, 10, 40, 0.5);
+        }
+        
+        .effect-card.selectable {
+            animation: border-pulse 2s infinite;
+            border: 2px solid rgba(229, 62, 106, 0.5);
+        }
+        
+        .effect-icon {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70px;
+        }
+        
+        .effect-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(30, 10, 40, 0.9);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border: 1px solid rgba(229, 62, 106, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        .notification.show {
+            opacity: 1;
+            animation: bounceIn 0.6s ease-out;
+        }
+        
+        .no-coins-message {
+            text-align: center;
+            padding: 20px;
+            background: rgba(50, 15, 60, 0.5);
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+            border: 1px solid rgba(229, 62, 106, 0.2);
+        }
+        
+        .no-coins-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .image-counter {
+            display: none;
+        }
+        
+        .checkout-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .checkout-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .checkout-content {
+            background: linear-gradient(135deg, #2d0b3a, #4a0b4a);
+            border-radius: 15px;
+            padding: 25px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(229, 62, 106, 0.3);
+            animation: modalSlideIn 0.4s ease-out;
+        }
+        
+        .checkout-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #e53e6a;
+        }
+        
+        .checkout-text {
+            margin-bottom: 20px;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+        
+        .checkout-btn {
+            background: linear-gradient(90deg, #e53e6a, #d53a9d);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(229, 62, 106, 0.3);
+        }
+        
+        .checkout-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(229, 62, 106, 0.5);
+        }
+        
+        .checkout-cancel {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .checkout-cancel:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        .upload-section {
+            background: rgba(229, 62, 106, 0.15);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px dashed rgba(229, 62, 106, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .upload-section:hover {
+            background: rgba(229, 62, 106, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(229, 62, 106, 0.2);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+        
+        .upload-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #e53e6a;
+        }
+        
+        .upload-description {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .upload-cta {
+            background: linear-gradient(90deg, #e53e6a, #d53a9d);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(229, 62, 106, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .upload-cta:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(229, 62, 106, 0.5);
+        }
+        
+        .upload-cta::before {
+            content: '📸';
+            font-size: 1.2rem;
+        }
+        
+        .upload-benefits {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .upload-benefit {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+        
+        .upload-benefit::before {
+            content: '✓';
+            color: #e53e6a;
+            font-weight: bold;
+        }
+        
+        .future-upload-hint {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(229, 62, 106, 0.1);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            font-style: italic;
+            border: 1px solid rgba(229, 62, 106, 0.2);
+        }
+        
+        .image-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 5;
+        }
+        
+        .image-loading.active {
+            display: flex;
+        }
+        
+        .image-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(229, 62, 106, 0.3);
+            border-top: 3px solid #e53e6a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        .image-loading-text {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .processing-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 11, 46, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 10;
+            border-radius: 12px;
+        }
+
+        .processing-overlay.active {
+            display: flex;
+        }
+
+        .ai-processing {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #e53e6a;
+            animation: pulse 2s infinite;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(229, 62, 106, 0.3);
+            border-top: 4px solid #e53e6a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        /* Placeholder para upload */
+        .upload-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            background: rgba(50, 15, 60, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 2px dashed rgba(229, 62, 106, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-placeholder:hover {
+            background: rgba(229, 62, 106, 0.1);
+            border-color: rgba(229, 62, 106, 0.7);
+        }
+        
+        .placeholder-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.7;
+        }
+        
+        .placeholder-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #e53e6a;
+        }
+        
+        .placeholder-subtext {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            line-height: 1.4;
+        }
+        
+        /* Melhorias no modal de checkout */
+        .pricing {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .original-price {
+            font-size: 1.2rem;
+            text-decoration: line-through;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+        
+        .promo-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+        
+        .timer-container {
+            background: rgba(229, 62, 106, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(229, 62, 106, 0.3);
+            animation: pulse-glow 2s infinite;
+        }
+        
+        .timer-title {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+        
+        .timer {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffd700;
+        }
+        
+        .checkout-features {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        
+        .checkout-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .checkout-feature::before {
+            content: "✓";
+            color: #e53e6a;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* Animações */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-50px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 62, 106, 0.5); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(229, 62, 106, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 62, 106, 0); }
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 4px 15px rgba(229, 62, 106, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 4px 20px rgba(229, 62, 106, 0.6); transform: scale(1.02); }
+            100% { box-shadow: 0 4px 15px rgba(229, 62, 106, 0.3); transform: scale(1); }
+        }
+
+        @keyframes border-pulse {
+            0% { border-color: rgba(229, 62, 106, 0.3); box-shadow: 0 0 5px rgba(229, 62, 106, 0.3); }
+            50% { border-color: rgba(229, 62, 106, 0.8); box-shadow: 0 0 15px rgba(229, 62, 106, 0.6); }
+            100% { border-color: rgba(229, 62, 106, 0.3); box-shadow: 0 0 5px rgba(229, 62, 106, 0.3); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">NUDEFIKE 👁️</div>
+        </header>
+        
+        <div class="coin-display" id="coin-display">
+            <div class="coin-icon">🪙</div>
+            <div class="coin-count" id="coin-count">3</div>
+        </div>
+        
+        <div class="image-container">
+            <div class="image-stage" id="image-stage">
+                <div class="processing-overlay" id="processing-overlay">
+                    <div class="loading-spinner"></div>
+                    <div class="ai-processing">Processando com IA...</div>
+                </div>
+                <div class="image-loading" id="image-loading">
+                    <div class="image-spinner"></div>
+                    <div class="image-loading-text">Carregando imagens...</div>
+                </div>
+                <div class="upload-placeholder" id="upload-placeholder" style="display: none;">
+                    <div class="placeholder-icon">🔥</div>
+                    <div class="placeholder-text">Escolha sua novinha!</div>
+                    <div class="placeholder-subtext">Faça upload de uma imagem para transformá-la com IA</div>
+                </div>
+                <img id="before-img" class="image-before" src="" alt="Antes">
+                <img id="after-img" class="image-after" src="" alt="Depois">
+            </div>
+            
+            <div class="future-upload-hint" id="future-upload-hint" style="display: none;">
+                <span>Na última imagem você poderá usar sua própria foto, escolha a novinha que quiser!</span>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="upload-btn" id="upload-btn" style="display: none;">Escolher Imagem</button>
+            <button class="edit-btn" id="edit-btn">Quero deixar ela peladinha! 🔥 (1 moeda)</button>
+            <button class="next-btn" id="next-btn" style="display: none;">Próxima Imagem →</button>
+        </div>
+        
+        <div class="effects-grid">
+            <div class="effect-card selected" data-effect="artistic">
+                <div class="effect-icon"><img class="efeito" src="public/efeito2.png" alt=""></div>
+                <div class="effect-name">Sem roupa</div>
+            </div>
+            <div class="effect-card locked" data-effect="vintage">
+                <div class="effect-icon"><img class="efeito" src="public/efeito4.png" alt=""></div>
+                <div class="effect-name">Boquete em 4K</div>
+            </div>
+            <div class="effect-card locked" data-effect="enhance">
+                <div class="effect-icon"><img class="efeito" src="public/efeito3.png" alt=""></div>
+                <div class="effect-name">De quatro</div>
+            </div>
+            <div class="effect-card locked" data-effect="color-pop">
+                <div class="effect-icon"><img class="efeito" src="public/efeito1.png" alt=""></div>
+                <div class="effect-name">De frente, abertinha</div>
+            </div>
+        </div>
+        
+        <div class="upload-section" id="upload-section" style="display: none;">
+            <div class="upload-icon">📷</div>
+            <div class="upload-title">Sua Vez de Brilhar</div>
+            <div class="upload-description">
+                Agora é a sua vez! Faça upload da sua foto e transforme com IA. 
+                Revele a beleza oculta com nossos efeitos exclusivos.
+            </div>
+            <button class="upload-cta" id="upload-cta">Escolher Minha Foto</button>
+            
+            <div class="upload-benefits">
+                <div class="upload-benefit">Resultados discretos</div>
+                <div class="upload-benefit">Efeitos sensuais</div>
+                <div class="upload-benefit">Transformação exclusiva</div>
+            </div>
+        </div>
+        
+        <div class="no-coins-message" id="no-coins-message">
+            <h3>Sem moedas disponíveis</h3>
+            <p>Você gastou todas as suas moedas. Volte amanhã para receber mais!</p>
+        </div>
+    </div>
+    
+    <div class="checkout-modal" id="checkout-modal">
+        <div class="checkout-content">
+            <h2 class="checkout-title">Oferta ULTRA ESPECIAL</h2>
+            <p class="checkout-text">Edite suas próprias novinhas com todos os efeitos exclusivos da IA!</p>
+            
+            <div class="pricing">
+                <div class="original-price">De R$ 99,90</div>
+                <div class="promo-price">Por apenas R$ 19,90</div>
+            </div>
+            
+            <div class="timer-container">
+                <div class="timer-title">Oferta expira em:</div>
+                <div class="timer" id="checkout-timer">14:00</div>
+            </div>
+            
+            <div class="checkout-features">
+                <div class="checkout-feature">Transforme qualquer foto com IA</div>
+                <div class="checkout-feature">Todos os efeitos sensuais liberados</div>
+                <div class="checkout-feature">Processamento ilimitado</div>
+                <div class="checkout-feature">Resultados em alta qualidade</div>
+            </div>
+            
+            <button class="checkout-btn" id="checkout-btn">Comprar Agora por R$ 19,90</button>
+            <button class="checkout-cancel" id="checkout-cancel">Cancelar</button>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    
+    <input type="file" id="file-input" accept="image/*" style="display: none;">
+    
+    <script>
+        // Elementos DOM
+        const coinCountElement = document.getElementById('coin-count');
+        const uploadBtn = document.getElementById('upload-btn');
+        const editBtn = document.getElementById('edit-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const fileInput = document.getElementById('file-input');
+        const beforeImg = document.getElementById('before-img');
+        const afterImg = document.getElementById('after-img');
+        const effectCards = document.querySelectorAll('.effect-card');
+        const notification = document.getElementById('notification');
+        const noCoinsMessage = document.getElementById('no-coins-message');
+        const checkoutModal = document.getElementById('checkout-modal');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const checkoutCancel = document.getElementById('checkout-cancel');
+        const uploadSection = document.getElementById('upload-section');
+        const uploadCta = document.getElementById('upload-cta');
+        const futureUploadHint = document.getElementById('future-upload-hint');
+        const processingOverlay = document.getElementById('processing-overlay');
+        const imageLoading = document.getElementById('image-loading');
+        const uploadPlaceholder = document.getElementById('upload-placeholder');
+        const checkoutTimer = document.getElementById('checkout-timer');
+        
+        // Estado da aplicação
+        let coins = 3;
+        let selectedEffect = 'artistic';
+        let currentImageIndex = 0;
+        let userImage = null;
+        let hasPremium = false;
+        let currentImageEdited = false;
+        let timerInterval;
+        
+        // URLs de imagens pré-definidas
+        const predefinedImages = [
+            {
+                original: './public/imagem1.webp',
+                edited: {
+                    artistic: './public/deepnude1.jpeg',
+                    vintage: './public/deepnude1.jpeg',
+                    enhance: './public/deepnude1.jpeg',
+                    'color-pop': './public/deepnude1.jpeg'
+                }
+            },
+            {
+                original: './public/imagem2.png',
+                edited: {
+                    artistic: './public/deepnude2.png',
+                    vintage: './public/deepnude2.png',
+                    enhance: './public/deepnude2.png',
+                    'color-pop': './public/deepnude2.png'
+                }
+            }
+        ];
+
+        // Nomes dos efeitos para exibição
+        const effectNames = {
+            artistic: "Sem roupa",
+            vintage: "Boquete em 4K", 
+            enhance: "De quatro",
+            'color-pop': "De frente, abertinha"
+        };
+        
+        // Inicialização
+        window.addEventListener('DOMContentLoaded', () => {
+            loadPredefinedImage(0);
+        });
+        
+        // Função para iniciar animação de reveal
+        function startRevealAnimation() {
+            beforeImg.classList.remove('fade-out');
+            afterImg.classList.remove('fade-in');
+            
+            setTimeout(() => {
+                beforeImg.classList.add('fade-out');
+                afterImg.classList.add('fade-in');
+            }, 500);
+        }
+        
+        // Simular processamento com IA
+        function simulateAIProcessing() {
+            processingOverlay.classList.add('active');
+            
+            setTimeout(() => {
+                processingOverlay.classList.remove('active');
+                completeImageProcessing();
+            }, 1500);
+        }
+        
+        // Completar processamento da imagem
+        function completeImageProcessing() {
+            coins--;
+            coinCountElement.textContent = coins;
+            
+            imageLoading.classList.add('active');
+            
+            if (currentImageIndex < 2) {
+                beforeImg.src = predefinedImages[currentImageIndex].original;
+                afterImg.src = predefinedImages[currentImageIndex].edited[selectedEffect];
+            } else {
+                beforeImg.src = userImage;
+                const randomEffectImage = predefinedImages[Math.floor(Math.random() * 2)].edited[selectedEffect];
+                afterImg.src = randomEffectImage;
+            }
+            
+            let imagesLoaded = 0;
+            const totalImages = 2;
+            
+            const onImageLoad = () => {
+                imagesLoaded++;
+                if (imagesLoaded === totalImages) {
+                    imageLoading.classList.remove('active');
+                    showComparison();
+                }
+            };
+            
+            beforeImg.onload = onImageLoad;
+            afterImg.onload = onImageLoad;
+            
+            setTimeout(() => {
+                imageLoading.classList.remove('active');
+                showComparison();
+            }, 3000);
+        }
+        
+        function showComparison() {
+            currentImageEdited = true;
+            
+            if (currentImageIndex < 2) {
+                nextBtn.style.display = 'block';
+                nextBtn.classList.add('pulse-animation');
+            }
+            
+            showNotification(`Imagem editada com sucesso usando ${effectNames[selectedEffect]}!`);
+            
+            startRevealAnimation();
+        }
+        
+        // Event Listeners
+        uploadBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        uploadCta.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        uploadPlaceholder.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', handleImageUpload);
+        
+        editBtn.addEventListener('click', applyEffect);
+        
+        nextBtn.addEventListener('click', nextImage);
+        
+        checkoutBtn.addEventListener('click', () => {
+            hasPremium = true;
+            coins += 5;
+            coinCountElement.textContent = coins;
+            checkoutModal.classList.remove('active');
+            showNotification('Pacote premium adquirido! 5 moedas adicionadas.');
+            
+            // Parar o timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            unlockEffects();
+            continueImageProcessing();
+        });
+        
+        checkoutCancel.addEventListener('click', () => {
+            checkoutModal.classList.remove('active');
+            showNotification('Processamento cancelado.');
+            
+            // Parar o timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            editBtn.disabled = false;
+            processingOverlay.classList.remove('active');
+        });
+        
+        effectCards.forEach(card => {
+            card.addEventListener('click', () => {
+                if (card.classList.contains('locked') && currentImageIndex !== 2) {
+                    showNotification('Efeito bloqueado! Complete as demonstrações primeiro.');
+                    return;
+                }
+                
+                effectCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedEffect = card.getAttribute('data-effect');
+                
+                showNotification(`Efeito selecionado: ${effectNames[selectedEffect]}`);
+            });
+        });
+        
+        // Funções
+        function loadPredefinedImage(index) {
+            currentImageIndex = index;
+            currentImageEdited = false;
+            
+            // Reset animações
+            beforeImg.classList.remove('fade-out');
+            afterImg.classList.remove('fade-in');
+            
+            if (index < 2) {
+                beforeImg.src = predefinedImages[index].original;
+                beforeImg.style.display = 'block';
+                afterImg.style.display = 'block';
+                uploadPlaceholder.style.display = 'none';
+                
+                selectedEffect = 'artistic';
+                uploadSection.style.display = 'none';
+                futureUploadHint.style.display = 'flex';
+                
+                // HABILITAR O BOTÃO DE EDIÇÃO para imagens pré-definidas
+                editBtn.disabled = false;
+                
+                lockEffects();
+            } else {
+                // Para a terceira imagem, mostrar placeholder
+                beforeImg.style.display = 'none';
+                afterImg.style.display = 'none';
+                uploadPlaceholder.style.display = 'flex';
+                
+                uploadBtn.style.display = 'block';
+                futureUploadHint.style.display = 'none';
+                uploadSection.style.display = 'none';
+                
+                unlockAllEffects();
+            }
+            
+            // IMPORTANTE: Sempre habilitar o botão de edição ao carregar nova imagem
+            // exceto quando for a terceira imagem sem upload ainda
+            editBtn.disabled = (index === 2 && !userImage);
+            
+            effectCards.forEach(c => c.classList.remove('selected'));
+            
+            if (index < 2) {
+                const firstEffect = document.querySelector('.effect-card[data-effect="artistic"]');
+                firstEffect.classList.add('selected');
+                selectedEffect = 'artistic';
+            }
+        }
+        
+        function lockEffects() {
+            effectCards.forEach(card => {
+                if (!card.classList.contains('selected')) {
+                    card.classList.add('locked');
+                }
+            });
+        }
+        
+        function unlockAllEffects() {
+            effectCards.forEach(card => {
+                card.classList.remove('locked');
+                card.classList.add('selectable');
+            });
+            
+            setTimeout(() => {
+                effectCards.forEach(card => {
+                    card.classList.remove('selectable');
+                });
+            }, 5000);
+            
+            showNotification('Todos os efeitos liberados! Escolha seu favorito.');
+        }
+        
+        function unlockEffects() {
+            effectCards.forEach(card => {
+                card.classList.remove('locked');
+            });
+            const firstEffect = effectCards[0];
+            firstEffect.classList.add('selected');
+            selectedEffect = firstEffect.getAttribute('data-effect');
+            
+            showNotification('Efeitos liberados! Escolha seu favorito.');
+        }
+        
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    beforeImg.src = e.target.result;
+                    beforeImg.style.display = 'block';
+                    afterImg.style.display = 'block';
+                    uploadPlaceholder.style.display = 'none';
+                    
+                    uploadSection.style.display = 'none';
+                    userImage = e.target.result;
+                    
+                    // HABILITAR O BOTÃO quando fizer upload na terceira imagem
+                    editBtn.disabled = false;
+                    
+                    showNotification('Imagem carregada com sucesso!');
+                    
+                    if (hasPremium) {
+                        unlockEffects();
+                    }
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function applyEffect() {
+            if (coins <= 0) {
+                showNotification('Você não tem moedas suficientes!');
+                noCoinsMessage.classList.add('show');
+                return;
+            }
+            
+            if (currentImageIndex === 2 && !selectedEffect) {
+                showNotification('Selecione um efeito primeiro!');
+                return;
+            }
+            
+            if (currentImageEdited) {
+                showNotification('Esta imagem já foi editada! Avance para a próxima.');
+                nextBtn.classList.add('pulse-animation');
+                return;
+            }
+            
+            editBtn.disabled = true;
+            
+            if (currentImageIndex === 2 && !hasPremium) {
+                setTimeout(() => {
+                    showCheckoutModal();
+                }, 500);
+                return;
+            }
+            
+            simulateAIProcessing();
+        }
+        
+        function continueImageProcessing() {
+            simulateAIProcessing();
+        }
+        
+        function nextImage() {
+            if (currentImageIndex < 2) {
+                nextBtn.classList.remove('pulse-animation');
+                loadPredefinedImage(currentImageIndex + 1);
+                nextBtn.style.display = 'none';
+            }
+        }
+        
+        function showCheckoutModal() {
+            checkoutModal.classList.add('active');
+            
+            // Iniciar contador regressivo
+            let minutes = 14;
+            let seconds = 0;
+            
+            updateTimerDisplay(minutes, seconds);
+            
+            timerInterval = setInterval(() => {
+                if (seconds === 0) {
+                    if (minutes === 0) {
+                        clearInterval(timerInterval);
+                        checkoutModal.classList.remove('active');
+                        showNotification('Oferta expirada!');
+                        return;
+                    }
+                    minutes--;
+                    seconds = 59;
+                } else {
+                    seconds--;
+                }
+                
+                updateTimerDisplay(minutes, seconds);
+            }, 1000);
+        }
+        
+        function updateTimerDisplay(minutes, seconds) {
+            const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+            const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+            checkoutTimer.textContent = `${formattedMinutes}:${formattedSeconds}`;
+        }
+        
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
