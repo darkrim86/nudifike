@@ -3,5 +3,5 @@ checkoutBtnC.addEventListener('click', processCheckout);
 
 function processCheckout() {
     localStorage.setItem('final', 'true');
-    window.location.href = 'https://go.invictuspay.app.br/3gkpp6qf2k';
+    window.location.href = 'https://pay.risepay.com.br/Pay/d65701e2faf74363a3547be700df690d';
 }
